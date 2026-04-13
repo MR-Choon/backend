@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>마크 서버 관리 패널</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body { font-family: sans-serif; background: #2c3e50; color: white; display: flex; flex-direction: column; align-items: center; }
+        #console { background: #000; color: #0f0; width: 80%; height: 500px; overflow-y: scroll; padding: 15px; border-radius: 5px; font-family: 'Consolas', monospace; white-space: pre-wrap; margin-bottom: 10px; }
+        input { width: 70%; padding: 10px; border: none; border-radius: 3px; }
+        button { padding: 10px 20px; cursor: pointer; background: #27ae60; color: white; border: none; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>Minecraft Live Console</h1>
+    <div id="console"></div>
+    <div style="width: 80%;">
+        <input type="text" id="cmd" placeholder="명령어 입력..." onkeypress="if(event.keyCode==13) sendCommand()">
+        <button onclick="sendCommand()">전송</button>
+    </div>
+
+    <script>
+        const socket = io();
+        const consoleDiv = document.getElementById('console');
+
+        socket.on('server_log', (data) => {
+            const line = document.createElement('div');
+            line.textContent = data;
+            consoleDiv.appendChild(line);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        });
+
+        function sendCommand() {
+            const cmd = document.getElementById('cmd').value;
+            if(cmd) {
+                socket.emit('send_command', cmd);
+                document.getElementById('cmd').value = '';
+            }
+        }
+    </script>
+</body>
+</html>
