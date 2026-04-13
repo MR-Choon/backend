@@ -20,7 +20,7 @@
     </div>
 
     <script>
-        const socket = io();
+        const socket = io(`${window.location.protocol}//${window.location.host}`);
         const consoleDiv = document.getElementById('console');
 
         socket.on('server_log', (data) => {

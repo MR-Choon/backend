@@ -8,9 +8,10 @@ const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server,{
+    cors:{ origin: "*" }
+});
 
-// --- [수정 필수 구간 1: 로그 경로] ---
 // 본인의 마인크래프트 서버 폴더 안에 있는 logs/latest.log 파일의 전체 경로를 적어주세요.
 // 예: 'C:/Users/Desktop/Server/logs/latest.log'
 const logPath = process.env.MC_LOG_PATH;
@@ -53,6 +54,6 @@ io.on('connection', (socket) => {
     });
 });
 
-server.listen(3000, () => {
-    console.log('웹 서버가 실행되었습니다: http://localhost:3000');
+server.listen(3000, '0.0.0.0', () => {
+    console.log('웹 서버가 실행되었습니다. 포트:3000');
 });
